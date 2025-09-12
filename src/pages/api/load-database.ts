@@ -1,49 +1,39 @@
-export const prerender = false; // es una API, no se prerenderiza
-
+export const prerender = false;
+import * as dotenv from "dotenv";
 import type { APIRoute } from 'astro';
 import { getDb } from '@/server/db';
+import axios from 'axios';
+import { json } from "@/server/helppers";
+dotenv.config();
 
-// export const POST: APIRoute = async ({ request }) => {
-//   let body: any = {};
-//   try {
-//     body = await request.json(); // todo viene por JSON
-//   } catch {
-//     return new Response(JSON.stringify({ ok: false, error: "Invalid or empty JSON body" }), {
-//       status: 400,
-//       headers: { "Content-Type": "application/json" },
-//     });
-//   }
-
-//   const db = await getDb();
-//   const res = await db.collection("posts").insertOne({
-//     ...body,
-//     createdAt: new Date(),
-//   });
-
-//   return new Response(JSON.stringify({ ok: true, insertedId: res.insertedId }), {
-//     status: 201,
-//     headers: { "Content-Type": "application/json" },
-//   });
-// };
-
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async () => {
   try {
-    let body: any = {};
-    
-    try {
-        body = await request.json();
-    } catch {
-        return new Response(JSON.stringify({ ok: false, error: "Invalid or empty JSON body" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-        });
+    const db = await getDb();
+    const API_KEY = process.env.API_KEY || '';
+
+    for (let i = 1; i <= 200; i++) {
+      const { data } = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page=${i}`);
+
+      const docs =
+        (data?.results || []).map((g: any) => ({
+          id: g.id,
+          name: g.name,
+          background_image: g.background_image,
+          rating: g.rating,
+          platforms: g.platforms,
+          stores: g.stores,
+          tags: g.tags,
+          genres: g.genres,
+          createdAt: new Date(),
+        })) ?? [];
+
+      if (docs.length) {
+        await db.collection('games').insertMany(docs, { ordered: false });
+      }
     }
 
-    console.log('body', body);
-  } catch (err) {
-    return new Response(JSON.stringify({ ok: false, error: err }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return json({ ok: true, message: 'Load games' }, 201);
+  } catch (err: any) {
+    return json({ ok: false, error: String(err?.message || err) }, 500);
   }
 };
