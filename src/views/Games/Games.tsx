@@ -3,6 +3,7 @@ import Card from '@/components/card';
 import CardCtn from '@/components/cards-ctn';
 import { get } from '@/utlis/fetcher';
 import { useEffect, useState } from 'react';
+import './Games.scss';
 
 const Games = () => {
   const [data, setData] = useState<Array<any> | null>(null);
