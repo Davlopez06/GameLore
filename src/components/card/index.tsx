@@ -36,17 +36,18 @@ const Card = ({ name = '', background_image = '', rating = 0, platforms = [], sk
   };
   if (skeleton)
     return (
-      <CardUI className="flex flex-col space-y-3 py-0 w-[328px] gap-[6px]">
-        <Skeleton className="h-[180px] w-full rounded-b-none" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
+      <CardUI className="flex flex-col space-y-3 py-0 w-[328px] gap-[6px] pb-[12px] h-[370px]">
+        <Skeleton className="h-[180px] w-full rounded-b-none mb-0" />
+        <div className="flex gap-[6px] px-[16px] w-full mb-0">
+          <Skeleton className="h-[33px] w-full" />
+          <Skeleton className="h-[33px] w-[45px]" />
         </div>
+        <Skeleton className="flex flex-[1] mx-[16px]" />
       </CardUI>
     );
 
   return (
-    <CardUI className="py-0 w-[328px] overflow-hidden gap-[6px]">
+    <CardUI className="py-0 w-[328px] overflow-hidden gap-[6px] pb-[12px]">
       <img className="h-[180px] object-cover" src={background_image} alt={`image-${name}`} />
       <div className="flex gap-[6px] items-center justify-between px-[16px]">
         <p className="text-[22px] line-clamp-1">{name}</p>

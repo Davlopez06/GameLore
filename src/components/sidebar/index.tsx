@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import fullLogo from '@/assets/full-logo.png';
 import './index.scss';
+import Filters from '../filters';
 
 const items = [
   {
@@ -30,6 +31,7 @@ const AppSidebar = () => {
             <img className="max-w-full p-2" src={fullLogo.src} alt="icon-logo" />
           </SidebarGroupLabel>
           <SidebarGroupContent>
+            <Filters />
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>

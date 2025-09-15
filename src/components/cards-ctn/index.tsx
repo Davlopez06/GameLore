@@ -5,7 +5,7 @@ type Props = {
 };
 
 const CardCtn = ({ children } : Props) => {
-  return <div className="w-full flex flex-wrap gap-4 justify-center">{children}</div>;
+  return <div className="w-full flex flex-wrap gap-4 justify-center mb-[16px]">{children}</div>;
 };
 
 export default CardCtn;
